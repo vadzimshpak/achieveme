@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="forest-sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1f12"/>
+      <stop offset="60%" style="stop-color:#1a3a2a"/>
+      <stop offset="100%" style="stop-color:#0f2818"/>
+    </linearGradient>
+    <linearGradient id="mist" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3d9970;stop-opacity:0.25"/>
+      <stop offset="100%" style="stop-color:#66c0f4;stop-opacity:0.1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#forest-sky)"/>
+  <rect y="500" width="1920" height="580" fill="url(#mist)"/>
+  <polygon points="0,700 250,620 500,720 750,650 1000,740 1250,660 1500,730 1750,640 1920,710 1920,1080 0,1080" fill="#0a1810"/>
+  <polygon points="0,780 200,720 450,800 700,740 950,810 1200,750 1450,820 1700,760 1920,800 1920,1080 0,1080" fill="#061008" opacity="0.9"/>
+</svg>

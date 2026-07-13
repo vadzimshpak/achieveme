@@ -1,0 +1,30 @@
+.xp-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.xp-bar__track {
+  width: 120px;
+  height: 6px;
+  background: var(--color-progress-bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.xp-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-level-ring), var(--color-level-gold));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.xp-bar__label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.xp-bar--wide .xp-bar__track {
+  width: 100%;
+}

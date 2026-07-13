@@ -1,0 +1,44 @@
+.profile-restricted {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.profile-restricted__card {
+  max-width: 420px;
+  width: 100%;
+  padding: 32px 24px;
+  text-align: center;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+}
+
+.profile-restricted__avatar {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border: 2px solid var(--color-link);
+  margin-bottom: 16px;
+}
+
+.profile-restricted__nickname {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 8px;
+}
+
+.profile-restricted__text {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0 0 20px;
+}
+
+.profile-restricted__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}

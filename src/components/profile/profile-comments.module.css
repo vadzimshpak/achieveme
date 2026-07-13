@@ -1,0 +1,135 @@
+.profile-comments {
+  margin-top: 16px;
+}
+
+.profile-comments__title {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.profile-comments__form {
+  margin-bottom: 16px;
+}
+
+.profile-comments__textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.profile-comments__textarea:focus {
+  outline: none;
+  border-color: var(--color-link);
+}
+
+.profile-comments__submit {
+  padding: 8px 16px;
+  background: var(--color-btn);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.profile-comments__submit:hover {
+  background: var(--color-btn-hover);
+}
+
+.profile-comments__login-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+}
+
+.profile-comments__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-comments__item {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+}
+
+.profile-comments__avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.profile-comments__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-comments__author {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.profile-comments__author:hover {
+  text-decoration: underline;
+}
+
+.profile-comments__date {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-left: 8px;
+}
+
+.profile-comments__text {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+  word-break: break-word;
+}
+
+.profile-comments__delete {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 6px;
+}
+
+.profile-comments__delete:hover {
+  color: var(--color-error);
+}
+
+.profile-comments__empty {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 24px;
+}
+
+.profile-comments__message {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.profile-comments__message--error {
+  color: var(--color-error);
+}
+
+.profile-comments__message--success {
+  color: var(--color-success);
+}

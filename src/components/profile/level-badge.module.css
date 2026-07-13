@@ -1,0 +1,44 @@
+.level-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.level-badge__label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.level-badge__ring {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid var(--color-level-ring);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.level-badge__number {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-level-gold);
+}
+
+.level-badge--high .level-badge__ring {
+  box-shadow: 0 0 12px rgba(255, 200, 44, 0.4);
+}
+
+.level-badge--compact .level-badge__ring {
+  width: 28px;
+  height: 28px;
+  border-width: 2px;
+}
+
+.level-badge--compact .level-badge__number {
+  font-size: 12px;
+}

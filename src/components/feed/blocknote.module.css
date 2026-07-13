@@ -1,0 +1,36 @@
+.blocknote-editor,
+.blocknote-viewer {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-inset);
+  border-radius: 0;
+}
+
+.blocknote-editor__loading {
+  padding: 16px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-inset);
+}
+
+.blocknote-editor :global(.bn-container),
+.blocknote-viewer :global(.bn-container) {
+  --bn-colors-editor-background: var(--color-bg-inset);
+  --bn-colors-editor-text: var(--color-text-secondary);
+  --bn-colors-menu-background: var(--color-bg-card);
+  --bn-colors-menu-text: var(--color-text-primary);
+  --bn-colors-border: var(--color-border);
+  --bn-colors-hovered-background: var(--color-bg-card-hover);
+  --bn-colors-selected-background: rgba(102, 192, 244, 0.15);
+  --bn-colors-tooltip-background: var(--color-bg-card);
+  --bn-colors-tooltip-text: var(--color-text-primary);
+}
+
+.blocknote-viewer :global(.bn-editor) {
+  padding: 8px 12px;
+}
+
+.blocknote-editor :global(.bn-editor) {
+  min-height: 160px;
+  padding: 8px 12px;
+}

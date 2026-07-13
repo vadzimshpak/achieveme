@@ -1,0 +1,36 @@
+.profile-activity {
+  margin-bottom: 16px;
+}
+
+.profile-activity__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.profile-activity__title {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-activity__counter {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.profile-activity__empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-muted);
+  background: var(--color-bg-card);
+  font-size: 14px;
+}
+
+.profile-activity__list {
+  display: flex;
+  flex-direction: column;
+}

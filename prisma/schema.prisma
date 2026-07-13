@@ -1,0 +1,346 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PostType {
+  PROGRESS
+  APPROVAL_REQUEST
+  ACHIEVEMENT_PROPOSAL
+}
+
+enum PostVoteValue {
+  LIKE
+  DISLIKE
+}
+
+enum ApprovalModerationStatus {
+  NONE
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PrivacyLevel {
+  EVERYONE
+  FRIENDS
+  NOBODY
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum ChatRoomType {
+  ACHIEVEMENT
+  DIRECT
+}
+
+enum NotificationType {
+  FRIEND_REQUEST
+}
+
+model StoredImage {
+  id        String   @id @default(cuid())
+  data      Bytes
+  mimeType  String
+  createdAt DateTime @default(now())
+
+  avatarForUser       User?                @relation("UserAvatar")
+  bannerPreset        BannerPreset?
+  sphereIcon          LifeSphere?
+  achievementTemplate AchievementTemplate?
+}
+
+model BannerPreset {
+  id        String @id
+  name      String
+  imageId   String @unique
+  sortOrder Int    @default(0)
+
+  image StoredImage @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  users User[]
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  nickname      String   @unique
+  avatarImageId String?  @unique
+  bannerPresetId String?
+  bio           String?
+  xp            Int      @default(0)
+  level         Int      @default(1)
+  role          Role     @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  avatarImage      StoredImage?      @relation("UserAvatar", fields: [avatarImageId], references: [id], onDelete: SetNull)
+  bannerPreset     BannerPreset?     @relation(fields: [bannerPresetId], references: [id], onDelete: SetNull)
+  currentGoals     UserCurrentGoal[]
+  userAchievements UserAchievement[]
+  commentsOnProfile ProfileComment[] @relation("ProfileComments")
+  authoredComments  ProfileComment[] @relation("AuthoredComments")
+  posts             Post[]
+  postVotes         PostVote[]
+  postComments      PostComment[]
+  postCommentVotes  PostCommentVote[]
+  moderatedPosts    Post[] @relation("ModeratedPosts")
+  privacySettings   UserPrivacySettings?
+  sentFriendRequests     FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
+  friendshipsAsA         Friendship[]    @relation("FriendshipUserA")
+  friendshipsAsB         Friendship[]    @relation("FriendshipUserB")
+  chatMessages             ChatMessage[]
+  directConversationsLow   DirectConversation[] @relation("DirectConvLow")
+  directConversationsHigh  DirectConversation[] @relation("DirectConvHigh")
+  notifications            Notification[] @relation("UserNotifications")
+  actedNotifications       Notification[] @relation("ActorNotifications")
+}
+
+model LifeSphere {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  iconImageId String?  @unique
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  iconImage            StoredImage?          @relation(fields: [iconImageId], references: [id], onDelete: SetNull)
+  achievementTemplates AchievementTemplate[]
+  currentGoals         UserCurrentGoal[]
+}
+
+model UserCurrentGoal {
+  userId                String
+  sphereId              String
+  achievementTemplateId String
+
+  user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sphere              LifeSphere          @relation(fields: [sphereId], references: [id], onDelete: Cascade)
+  achievementTemplate AchievementTemplate @relation(fields: [achievementTemplateId], references: [id], onDelete: Cascade)
+
+  @@id([userId, sphereId])
+}
+
+model AchievementTemplate {
+  id          String   @id @default(cuid())
+  sphereId    String
+  title       String
+  description String?
+  iconImageId String?  @unique
+  xpReward    Int      @default(10)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  iconImage        StoredImage?      @relation(fields: [iconImageId], references: [id], onDelete: SetNull)
+  sphere           LifeSphere        @relation(fields: [sphereId], references: [id], onDelete: Cascade)
+  userAchievements UserAchievement[]
+  currentGoals     UserCurrentGoal[]
+  posts            Post[]
+  chatRooms        ChatRoom[]
+}
+
+model UserAchievement {
+  id                    String   @id @default(cuid())
+  userId                String
+  achievementTemplateId String
+  unlockedAt            DateTime @default(now())
+
+  user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementTemplate AchievementTemplate @relation(fields: [achievementTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementTemplateId])
+}
+
+model ProfileComment {
+  id            String   @id @default(cuid())
+  profileUserId String
+  authorId      String
+  text          String
+  createdAt     DateTime @default(now())
+
+  profileUser User @relation("ProfileComments", fields: [profileUserId], references: [id], onDelete: Cascade)
+  author      User @relation("AuthoredComments", fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id                    String   @id @default(cuid())
+  authorId              String
+  achievementTemplateId String?
+  title                 String
+  body                  Json
+  type                  PostType                 @default(PROGRESS)
+  moderationStatus      ApprovalModerationStatus @default(NONE)
+  moderationNote        String?
+  moderatedAt           DateTime?
+  moderatedById         String?
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+
+  author              User                 @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  achievementTemplate AchievementTemplate? @relation(fields: [achievementTemplateId], references: [id], onDelete: Cascade)
+  moderatedBy         User?               @relation("ModeratedPosts", fields: [moderatedById], references: [id], onDelete: SetNull)
+  votes               PostVote[]
+  comments            PostComment[]
+
+  @@index([createdAt(sort: Desc)])
+  @@index([type])
+  @@index([achievementTemplateId])
+  @@index([moderationStatus])
+}
+
+model PostVote {
+  id     String        @id @default(cuid())
+  userId String
+  postId String
+  value  PostVoteValue
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([postId])
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post   Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  votes  PostCommentVote[]
+
+  @@index([postId, createdAt(sort: Asc)])
+  @@index([authorId])
+}
+
+model PostCommentVote {
+  id        String        @id @default(cuid())
+  userId    String
+  commentId String
+  value     PostVoteValue
+
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+  @@index([commentId])
+}
+
+model UserPrivacySettings {
+  userId String @id
+
+  whoCanMessage     PrivacyLevel @default(EVERYONE)
+  whoCanComment     PrivacyLevel @default(EVERYONE)
+  whoCanViewProfile PrivacyLevel @default(EVERYONE)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FriendRequest {
+  id         String              @id @default(cuid())
+  fromUserId String
+  toUserId   String
+  status     FriendRequestStatus @default(PENDING)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  fromUser User @relation("SentFriendRequests", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser   User @relation("ReceivedFriendRequests", fields: [toUserId], references: [id], onDelete: Cascade)
+
+  @@unique([fromUserId, toUserId])
+  @@index([toUserId, status])
+  @@index([fromUserId, status])
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  userAId   String
+  userBId   String
+  createdAt DateTime @default(now())
+
+  userA User @relation("FriendshipUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB User @relation("FriendshipUserB", fields: [userBId], references: [id], onDelete: Cascade)
+
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
+}
+
+model ChatRoom {
+  id                    String       @id @default(cuid())
+  type                  ChatRoomType
+  achievementTemplateId String?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  achievementTemplate AchievementTemplate? @relation(fields: [achievementTemplateId], references: [id], onDelete: Cascade)
+  messages            ChatMessage[]
+  directConversation  DirectConversation?
+
+  @@unique([type, achievementTemplateId])
+  @@index([type])
+}
+
+model DirectConversation {
+  id         String   @id @default(cuid())
+  roomId     String   @unique
+  userLowId  String
+  userHighId String
+  createdAt  DateTime @default(now())
+
+  room     ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userLow  User     @relation("DirectConvLow", fields: [userLowId], references: [id], onDelete: Cascade)
+  userHigh User     @relation("DirectConvHigh", fields: [userHighId], references: [id], onDelete: Cascade)
+
+  @@unique([userLowId, userHighId])
+  @@index([userLowId])
+  @@index([userHighId])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  roomId    String
+  authorId  String
+  text      String
+  createdAt DateTime @default(now())
+
+  room   ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  author User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, createdAt(sort: Asc)])
+  @@index([authorId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  actorId   String?
+  type      NotificationType
+  entityId  String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user  User  @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  actor User? @relation("ActorNotifications", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([userId, readAt, createdAt(sort: Desc)])
+}

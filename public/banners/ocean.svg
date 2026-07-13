@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="ocean-sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628"/>
+      <stop offset="50%" style="stop-color:#1a4a6e"/>
+      <stop offset="100%" style="stop-color:#0d3d5c"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#66c0f4;stop-opacity:0.15"/>
+      <stop offset="50%" style="stop-color:#4ecdc4;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#66c0f4;stop-opacity:0.1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#ocean-sky)"/>
+  <ellipse cx="960" cy="550" rx="1000" ry="180" fill="url(#wave)"/>
+  <ellipse cx="500" cy="650" rx="600" ry="120" fill="#4ecdc4" opacity="0.08"/>
+  <ellipse cx="1500" cy="600" rx="500" ry="100" fill="#66c0f4" opacity="0.1"/>
+  <rect y="850" width="1920" height="230" fill="#081420"/>
+</svg>
