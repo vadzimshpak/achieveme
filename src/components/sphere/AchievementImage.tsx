@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import type { AchievementRarityTier } from "@/lib/achievement-rarity";
 import { achievementIconSrc, achievementImageUnoptimized } from "@/lib/image-urls";
 import styles from "./achievement-image.module.css";
 
@@ -15,8 +16,6 @@ type AchievementImageProps = {
   className?: string;
   interactive?: boolean;
 };
-
-type AchievementRarityTier = "bronze" | "silver" | "gold" | "purple" | "single" | "unknown";
 
 type AchievementRarity = {
   owners: number;
@@ -178,38 +177,32 @@ export function AchievementImage({
 
   const handleClose = useCallback(() => setOpen(false), []);
 
+  const loadRarity = useCallback(async () => {
+    if (!achievementTemplateId) return;
+
+    try {
+      const response = await fetch(`/api/achievements/${achievementTemplateId}/rarity`, {
+        cache: "no-store",
+      });
+      if (!response.ok) return;
+
+      const data = (await response.json()) as AchievementRarity;
+      setRarity(data);
+    } catch {
+      // ignore
+    }
+  }, [achievementTemplateId]);
+
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (!achievementTemplateId) return;
+    void loadRarity();
+  }, [loadRarity]);
 
-    const cacheKey = achievementTemplateId;
-    const globalCache = (globalThis as unknown as { __achievemeRarity?: Map<string, AchievementRarity> })
-      .__achievemeRarity;
-    const cache = globalCache ?? new Map<string, AchievementRarity>();
-    (globalThis as unknown as { __achievemeRarity?: Map<string, AchievementRarity> }).__achievemeRarity =
-      cache;
-
-    const cached = cache.get(cacheKey);
-    if (cached) {
-      setRarity(cached);
-      return;
-    }
-
-    let cancelled = false;
-    void fetch(`/api/achievements/${achievementTemplateId}/rarity`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data: AchievementRarity | null) => {
-        if (cancelled || !data) return;
-        cache.set(cacheKey, data);
-        setRarity(data);
-      })
-      .catch(() => {});
-
-    return () => {
-      cancelled = true;
-    };
-  }, [achievementTemplateId]);
+  useEffect(() => {
+    if (!open) return;
+    void loadRarity();
+  }, [open, loadRarity]);
 
   const image = (
     <figure className={styles["achievement-image__figure"]}>
