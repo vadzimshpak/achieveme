@@ -142,7 +142,7 @@ achieveme/
 │   ├── actions/           # Server Actions
 │   ├── components/        # UI (BEM + CSS Modules)
 │   ├── lib/               # Prisma, auth, level, profile
-│   └── middleware.ts      # Защита маршрутов
+│   └── proxy.ts             # Защита маршрутов
 └── .env.example
 ```
 

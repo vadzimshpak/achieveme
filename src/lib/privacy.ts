@@ -1,6 +1,9 @@
 import type { PrivacyLevel } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { areFriends } from "@/lib/friendship";
+import { PRIVACY_LABELS } from "@/lib/privacy-labels";
+
+export { PRIVACY_LABELS };
 
 export type PrivacySettings = {
   whoCanMessage: PrivacyLevel;
@@ -71,9 +74,3 @@ export async function canSendDirectMessage(
   const settings = await getPrivacySettings(targetUserId);
   return checkPrivacyLevel(settings.whoCanMessage, targetUserId, senderUserId);
 }
-
-export const PRIVACY_LABELS: Record<PrivacyLevel, string> = {
-  EVERYONE: "Все",
-  FRIENDS: "Друзья",
-  NOBODY: "Никто",
-};

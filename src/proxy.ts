@@ -7,7 +7,7 @@ import { clearAuthSessionCookies, hasAuthSessionCookie } from "@/lib/auth-cookie
 const protectedRoutes = ["/settings", "/achievements", "/admin", "/chat"];
 const authRoutes = ["/login", "/register"];
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const hasSessionCookie = hasAuthSessionCookie(req);
 

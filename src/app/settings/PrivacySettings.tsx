@@ -4,7 +4,7 @@ import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { updatePrivacyAction } from "@/actions/privacy";
 import type { PrivacyLevel } from "@/generated/prisma/client";
-import { PRIVACY_LABELS } from "@/lib/privacy";
+import { PRIVACY_LABELS } from "@/lib/privacy-labels";
 import styles from "./settings.module.css";
 
 type PrivacySettingsProps = {
